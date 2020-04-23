@@ -9,7 +9,7 @@ Manual for helping to run the urc-backend on Raspberry Pi with initial Zigbee2MQ
 
 ``sudo apt install python3 python-pip3 mosquitto mosquitto-clients npm git make g++ gcc adb``
 
-``pip3 install flask flask-cors paho-mqtt python-dotenv requests``
+``pip3 install flask flask-cors paho-mqtt python-dotenv requests adb-shell``
 
 ## 2. Mosquitto MQTT Broker
 
@@ -113,7 +113,7 @@ Add the following lines:
 
 ```
 [Unit]
-Description=flask_mqtt_api
+Description=urc_backend
 After=network.target
 
 [Service]
@@ -167,7 +167,15 @@ Start service and enable it:
 
 ``sudo reboot``
 
-## 6. Change hostname
+## 6. Establish adb connection
+
+Establish a connection with the native adb implementation. The port is usually ``5555``:
+
+``adb connect <IP-address>:<PORT>``
+
+Then copy the adbkey from ``~/.android/adbkey`` to the urc-backend directory and don't forget to include the path into the device file of the adb accessible device.
+
+## 7. Change hostname
 
 ``sudo hostname -b smarthome``
 
