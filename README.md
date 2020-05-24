@@ -134,6 +134,8 @@ WantedBy=multi-user.target
 
 ## 5. Deactivate Raspberry Pi LEDs on system startup
 
+### System and activity LEDs
+
 ``sudo nano /opt/stop_raspi_leds.sh``
 
 Add the following lines:
@@ -165,7 +167,42 @@ Start service and enable it:
 
 ``sudo systemctl enable ledoff.service``
 
-``sudo reboot``
+### Ethernet LEDs
+
+For deactivating the Raspberry Pi 3 Model B ethernet LEDs see the c-code from this topic:
+
+- Original: https://www.raspberrypi.org/forums/viewtopic.php?t=72070
+- Mirrored: https://github.com/nateober/RaspberryPI/tree/master/llctl
+
+Download it and install dependencies:
+
+``sudo apt install gcc libusb-dev``
+
+Then compile it: ``make``.
+
+Copy the program to /opt: ``sudo mv llctl /opt/``
+
+``sudo nano /etc/systemd/system/networkledoff.service``
+
+Add the following lines:
+
+```
+[Unit]
+Description=stopraspinetworkled
+
+[Service]
+Type=idle
+ExecStart=/opt/llctl f0 l0 d0
+
+[Install]
+WantedBy=multi-user.target
+```
+Start service and enable it:
+
+``sudo systemctl start networkledoff``
+
+``sudo systemctl enable networkledoff.service``
+
 
 ## 6. Establish adb connection
 
